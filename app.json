@@ -3,6 +3,8 @@
     "name": "chatbot-ui-mobile",
     "slug": "chatbot-ui-mobile",
     "version": "1.0.0",
+    "owner": "Chenxi-Zhuang",
+    "description": "A mobile chatbot powered by OpenAI GPT",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "chatbotuimobile",

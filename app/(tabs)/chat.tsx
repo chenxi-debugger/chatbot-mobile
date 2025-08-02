@@ -1,25 +1,27 @@
-import React, { useEffect, useRef, useState } from 'react';
+import ChatHeader from '@/components/ChatHeader';
+import InputBox from '@/components/InputBox';
+import MessageBubble from '@/components/MessageBubble';
+import { useThemeStore } from '@/store/themeStore';
+import { chatWithOpenAI } from '@/utils/openai';
+import { useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   StyleSheet,
   View,
 } from 'react-native';
-
-import ChatHeader from '@/components/ChatHeader';
-import InputBox from '@/components/InputBox';
-import MessageBubble from '@/components/MessageBubble';
-import { chatWithOpenAI } from '@/utils/openai';
-import type { FlatList as FlatListType } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ChatScreen() {
+  const { theme } = useThemeStore();
+  const isDarkMode = theme === 'dark';
+
   const [messages, setMessages] = useState([
     { id: '1', sender: 'assistant', text: 'Hi! How can I help you today?' },
   ]);
   const [loading, setLoading] = useState(false);
-  const flatListRef = useRef<FlatListType>(null);
+  const flatListRef = useRef<FlatList>(null);
 
   const handleSend = async (text: string) => {
     if (!text.trim()) return;
@@ -56,7 +58,12 @@ export default function ChatScreen() {
   }, [messages]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#0f172a' }}>
+    <SafeAreaView
+      style={[
+        styles.safeArea,
+        { backgroundColor: isDarkMode ? '#0f172a' : '#ffffff' },
+      ]}
+    >
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -71,10 +78,11 @@ export default function ChatScreen() {
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => <MessageBubble message={item} />}
             contentContainerStyle={styles.chatArea}
-            onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+            onContentSizeChange={() =>
+              flatListRef.current?.scrollToEnd({ animated: true })
+            }
           />
 
-          {/* ✅ 输入框放在这里，绝对不会被遮挡 */}
           <InputBox onSend={handleSend} loading={loading} />
         </View>
       </KeyboardAvoidingView>
@@ -83,9 +91,11 @@ export default function ChatScreen() {
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: '#0f172a',
   },
   chatArea: {
     paddingHorizontal: 10,

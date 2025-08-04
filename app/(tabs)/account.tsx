@@ -1,5 +1,6 @@
-import { auth } from '@/lib/firebase'; // ✅ 确保路径正确
+import { auth } from '@/lib/firebase';
 import { useThemeStore } from '@/store/themeStore';
+import { useRouter } from 'expo-router';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { Alert, Button, StyleSheet, Text, View } from 'react-native';
@@ -8,8 +9,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function AccountScreen() {
   const { theme } = useThemeStore();
   const isDarkMode = theme === 'dark';
-
   const [user, setUser] = useState<any>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -26,6 +27,10 @@ export default function AccountScreen() {
     } catch (err) {
       Alert.alert('Error', 'Failed to sign out');
     }
+  };
+
+  const handleLoginRedirect = () => {
+    router.push('/login'); // replace this with your actual login page route
   };
 
   return (
@@ -79,14 +84,26 @@ export default function AccountScreen() {
           >
             {user.email}
           </Text>
+
+          <Button title="Sign Out" onPress={handleSignOut} color="#ef4444" />
         </View>
       ) : (
-        <Text style={{ color: isDarkMode ? '#ffffff' : '#111827' }}>
-          Not logged in
-        </Text>
+        <View style={styles.infoSection}>
+          <Text
+            style={{
+              color: isDarkMode ? '#ffffff' : '#111827',
+              marginBottom: 12,
+            }}
+          >
+            Not logged in
+          </Text>
+          <Button
+            title="Login / Register"
+            onPress={handleLoginRedirect}
+            color="#3b82f6"
+          />
+        </View>
       )}
-
-      <Button title="Sign Out" onPress={handleSignOut} color="#ef4444" />
     </SafeAreaView>
   );
 }

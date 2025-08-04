@@ -55,6 +55,7 @@ export default function SettingsScreen() {
         onChangeText={setApiKey}
         placeholder="sk-xxxx"
         placeholderTextColor={colors.placeholder}
+        secureTextEntry={true} 
         style={[styles.input, { backgroundColor: colors.inputBackground, color: colors.text, borderColor: colors.borderColor }]}
       />
 

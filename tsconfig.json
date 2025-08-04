@@ -2,14 +2,10 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    "baseUrl": ".",             // ✅ 指向根目录
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]            // ✅ 让 @ 指向根目录的所有内容
     }
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx"
-  ]
+  "include": ["**/*.ts", "**/*.tsx"]
 }

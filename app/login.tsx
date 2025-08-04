@@ -1,4 +1,4 @@
-import { auth } from '@/lib/firebase';
+import { auth } from '@/lib/firebase'; // ✅ 自动根据平台切换
 import { useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';

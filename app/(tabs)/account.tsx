@@ -1,10 +1,11 @@
-import { auth } from '@/lib/firebase';
+import { auth } from '@/lib/firebase'; // ✅ auth 实例
 import { useThemeStore } from '@/store/themeStore';
 import { useRouter } from 'expo-router';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth'; // ✅ Firebase SDK 函数
 import { useEffect, useState } from 'react';
 import { Alert, Button, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 export default function AccountScreen() {
   const { theme } = useThemeStore();

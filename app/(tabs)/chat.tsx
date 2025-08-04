@@ -3,6 +3,7 @@ import InputBox from '@/components/InputBox';
 import MessageBubble from '@/components/MessageBubble';
 import { useThemeStore } from '@/store/themeStore';
 import { chatWithOpenAI } from '@/utils/openai';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useRef, useState } from 'react';
 import {
   FlatList,
@@ -12,6 +13,8 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+const CHAT_STORAGE_KEY = 'chatMessages';
 
 export default function ChatScreen() {
   const { theme } = useThemeStore();
@@ -55,6 +58,29 @@ export default function ChatScreen() {
 
   useEffect(() => {
     flatListRef.current?.scrollToEnd({ animated: true });
+  }, [messages]);
+
+  // ✅ 加载历史消息
+  useEffect(() => {
+    const loadMessages = async () => {
+      const raw = await AsyncStorage.getItem(CHAT_STORAGE_KEY);
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          setMessages(parsed);
+        } catch (err) {
+          console.error('Failed to parse saved chat messages', err);
+        }
+      }
+    };
+    loadMessages();
+  }, []);
+
+  // ✅ 自动保存到本地
+  useEffect(() => {
+    AsyncStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages)).catch((err) =>
+      console.error('Failed to save messages:', err)
+    );
   }, [messages]);
 
   return (
